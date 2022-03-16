@@ -1,0 +1,62 @@
+{
+    "name": "invetory-app",
+    "version": "0.0.0",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview",
+        "prepare": "husky install",
+        "lint": "eslint --fix 'src/**/*.{js,ts,jsx,tsx}'",
+        "build-surge": "vite build && cp dist/index.html dist/200.html"
+    },
+    "dependencies": {
+        "axios": "^0.24.0",
+        "daisyui": "^1.16.2",
+        "formik": "^2.2.9",
+        "framer-motion": "^5.3.1",
+        "global": "^4.4.0",
+        "history": "4.10.1",
+        "match-sorter": "^6.3.1",
+        "prop-types": "^15.7.2",
+        "react": "^17.0.0",
+        "react-dom": "^17.0.0",
+        "react-dropzone": "^11.4.2",
+        "react-loader-spinner": "^4.0.0",
+        "react-redux": "^7.2.5",
+        "react-router-dom": "^5.2.0",
+        "react-scroll": "^1.8.4",
+        "react-table": "^7.7.0",
+        "react-toastify": "^8.1.0",
+        "redux": "^4.1.1",
+        "redux-thunk": "^2.3.0",
+        "swiper": "^7.2.0",
+        "yup": "^0.32.11"
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^21.0.1",
+        "@types/react-dom": "^17.0.11",
+        "@types/react-router-dom": "^5.3.2",
+        "@types/react-table": "^7.7.8",
+        "@vitejs/plugin-react": "^1.0.0",
+        "eslint": "^8.0.1",
+        "eslint-config-airbnb": "^18.2.1",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-import": "^2.25.2",
+        "eslint-plugin-jsx-a11y": "^6.4.1",
+        "eslint-plugin-prettier": "^4.0.0",
+        "eslint-plugin-react": "^7.26.1",
+        "eslint-plugin-simple-import-sort": "^7.0.0",
+        "husky": "^7.0.2",
+        "lint-staged": ">=10",
+        "local-cors-proxy": "^1.1.0",
+        "prettier": "^2.4.1",
+        "vite": "^2.6.4",
+        "vite-plugin-env-compatible": "^1.1.1",
+        "vite-plugin-svgr": "^0.4.0",
+        "vite-plugin-windicss": "^1.5.1",
+        "windicss": "^3.2.1"
+    },
+    "lint-staged": {
+        "src/**/*.{js,ts,jsx,tsx}": "eslint --cache --fix"
+    }
+}
