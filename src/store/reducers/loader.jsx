@@ -5,7 +5,7 @@ import {
 
 const initialState = {
     isActive: false,
-    isAuthenticated: true,
+    isAuthenticated: false, // temporary change
 };
 
 export const loader = (state = initialState, action) => {
