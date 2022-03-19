@@ -23,11 +23,10 @@ const About = () => {
                     </div>
                     <div className="my-5 px2 md:px-20">
                         <p className="leading-10">
-                            Karomz Inventory is an inventory
-                            application that will store your products
-                            with safe and sound storing management!
-                            This application will give you the
-                            convinience of managing your products
+                            Inventory application that will store your
+                            products with safe and sound storing
+                            management! This application will give you
+                            the convinience of managing your products
                             efficiently as you can access it wherever
                             and whenever you are!
                         </p>
