@@ -1,5 +1,4 @@
 import LayoutBack from 'components/LayoutBack';
-import products from 'constant/api/products';
 import Content from 'pages/managestock/editstock/components';
 import { useMemo } from 'react';
 import { useEffect, useState } from 'react';
@@ -33,20 +32,9 @@ const EditStock = () => {
 
     const [data, setData] = useState(null);
     useEffect(async () => {
-        const toastId = 'fetchprodall';
-        try {
-            window.showLoader(true);
-            const res = await products.getAll();
-            setData(res.data);
-            window.showLoader(false);
-        } catch (error) {
-            window.showLoader(false);
-            window.showToast(
-                toastId,
-                'error',
-                error?.response?.data?.message ?? error?.message,
-            );
-        }
+        window.showLoader(true);
+        setData([]);
+        window.showLoader(false);
     }, []);
 
     return (

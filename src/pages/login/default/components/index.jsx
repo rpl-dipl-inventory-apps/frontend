@@ -39,7 +39,6 @@ const Content = () => {
             dispatch(
                 populateProfile({
                     username: 'tes',
-                    image_url: 'tes',
                 }),
             );
             window.showLoader(false);
