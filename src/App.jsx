@@ -7,6 +7,9 @@ import history from 'helpers/history';
 import { showToast } from 'helpers/toastHelper';
 import Dashboard from 'pages/dashboard/default';
 import Home from 'pages/home/default';
+import AddItem from 'pages/items/add';
+import EditItem from 'pages/items/edit';
+import ListItems from 'pages/items/list';
 import Login from 'pages/login/default';
 import Logout from 'pages/logout/default';
 import ManageStockDefault from 'pages/managestock/default';
@@ -62,6 +65,21 @@ const App = () => {
                     exact
                     path="/managestock/edit"
                     component={EditStock}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/items"
+                    component={ListItems}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/items/add"
+                    component={AddItem}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/items/edit/:id"
+                    component={EditItem}
                 />
                 <ProtectedRoute
                     exact
