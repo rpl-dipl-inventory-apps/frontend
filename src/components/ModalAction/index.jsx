@@ -10,7 +10,7 @@ const ModalAction = (props) => {
     const currentElm = useRef(null);
 
     const handleOutsideClick = (e) => {
-        if (!currentElm.current.contains(e.target)) {
+        if (!currentElm?.current?.contains(e.target)) {
             setIsOpen(false);
             document.removeEventListener('click', handleOutsideClick);
         }

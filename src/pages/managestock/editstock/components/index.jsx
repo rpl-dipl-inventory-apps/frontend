@@ -2,6 +2,7 @@ import Autocomplete from 'components/Autocomplete';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import Paper from 'components/Paper';
+import products from 'constant/api/products';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -13,16 +14,28 @@ const EditStockContent = ({ data, type }) => {
     const [selectedData, setSelectedData] = useState(null);
     const [dataByIdLoading, setDataByIdLoading] = useState(false);
     const [stockAfterChanged, setStockAfterChanged] = useState(0);
+    const [reduceStockResponse, setReduceStockResponse] =
+        useState(null);
 
     const formik = useFormik({
         initialValues: {
             selectedProduct: null,
             qty: '',
+            location: null,
+            is_type_add: type === 'Add',
         },
         validationSchema: Yup.object().shape({
             selectedProduct: Yup.string().required(
                 'product field is required',
             ),
+            is_type_add: Yup.boolean(),
+            location: Yup.mixed().when('is_type_add', {
+                is: true,
+                then: Yup.mixed()
+                    .required('location field is required')
+                    .typeError('location field is required'),
+                otherwise: Yup.mixed().notRequired(),
+            }),
             qty: Yup.number()
                 .max(
                     type === 'Add'
@@ -36,24 +49,71 @@ const EditStockContent = ({ data, type }) => {
         validateOnBlur: true,
         validateOnMount: true,
         enableReinitialize: true,
-        onSubmit: async () => {
+        onSubmit: async (values) => {
             window.showLoader(true);
             const toastId = 'updateproductstock';
             const fixValues = { ...selectedData };
             fixValues.stock = stockAfterChanged;
-            window.showLoader(false);
-            window.showToast(
-                toastId,
-                'info',
-                'Successfully update stock',
-            );
-            setTimeout(() => history.push('/managestock'), 1000);
+            try {
+                if (type === 'Reduce') {
+                    const res = await products.reduceStock(
+                        selectedData.id,
+                        fixValues,
+                    );
+                    const stockList = res?.data?.stock_list;
+                    setReduceStockResponse(stockList);
+                } else {
+                    fixValues?.stock_list?.push({
+                        location_id: Number(values.location),
+                        quantity: Number(values.qty),
+                    });
+                    await products.update(
+                        selectedData?.id,
+                        fixValues,
+                    );
+                }
+
+                window.showLoader(false);
+                window.showToast(
+                    toastId,
+                    'info',
+                    'Successfully update stock',
+                );
+
+                if (type === 'Add') {
+                    setTimeout(
+                        () => history.push('/managestock'),
+                        1000,
+                    );
+                }
+            } catch (error) {
+                window.showLoader(false);
+                window.showToast(
+                    toastId,
+                    'error',
+                    error?.response?.data?.message ?? error?.message,
+                );
+            }
         },
     });
     useEffect(() => {
         if (formik.values.selectedProduct) {
             setDataByIdLoading(true);
-            setSelectedData([]);
+            products
+                .getById(formik.values.selectedProduct)
+                .then((res) => {
+                    setSelectedData(res?.data);
+                    setDataByIdLoading(false);
+                })
+                .catch((error) => {
+                    setDataByIdLoading(false);
+                    window.showToast(
+                        'fetchprodbyid',
+                        'error',
+                        error?.response?.data?.message ??
+                            error?.message,
+                    );
+                });
         }
         if (!formik.values.selectedProduct) {
             setSelectedData(null);
@@ -97,7 +157,7 @@ const EditStockContent = ({ data, type }) => {
                                     formik.touched.selectedProduct &&
                                     formik.errors.selectedProduct
                                 }
-                                options={data ?? []}
+                                options={data?.products ?? []}
                                 labelKey="product_name"
                                 valueKey="id"
                                 setValue={(value) => {
@@ -119,12 +179,37 @@ const EditStockContent = ({ data, type }) => {
 
                     {selectedData && !dataByIdLoading && (
                         <div className="w-full px-2 py-3">
-                            <div className="w-full flex justify-start">
+                            <div className="w-full flex justify-start px-1 left-2">
                                 Current Stock&nbsp;{' '}
-                                <span className=" text-red-600">
+                                <span className=" text-red-600 ">
                                     {selectedData?.stock}
                                 </span>
                             </div>
+                            {type === 'Add' && (
+                                <div className="w-full pr-5 py-3">
+                                    <Autocomplete
+                                        name="location"
+                                        label="Select Location"
+                                        inputBg="bg-theme-brown-300"
+                                        outline
+                                        error={
+                                            formik.touched.location &&
+                                            formik.errors.location
+                                        }
+                                        options={
+                                            data?.locations ?? []
+                                        }
+                                        labelKey="location_name"
+                                        valueKey="id"
+                                        setValue={(value) => {
+                                            formik.setFieldValue(
+                                                'location',
+                                                value,
+                                            );
+                                        }}
+                                    />
+                                </div>
+                            )}
                         </div>
                     )}
                     {selectedData && !dataByIdLoading && (
@@ -167,6 +252,34 @@ const EditStockContent = ({ data, type }) => {
                                     />
                                 </div>
                             </div>
+                            {reduceStockResponse && (
+                                <div className="w-full px-2 py-3 flex flex-col justify-center">
+                                    <p>
+                                        pick up items at the following
+                                        locations :
+                                    </p>
+                                    <br />
+                                    <ul className="list-disc">
+                                        {reduceStockResponse?.map(
+                                            (item, idx) => (
+                                                <li key={idx}>
+                                                    <b>
+                                                        {
+                                                            item?.location_name
+                                                        }
+                                                    </b>{' '}
+                                                    as much as{' '}
+                                                    <b>
+                                                        {
+                                                            item?.quantity
+                                                        }
+                                                    </b>
+                                                </li>
+                                            ),
+                                        )}
+                                    </ul>
+                                </div>
+                            )}
                         </>
                     )}
                 </form>

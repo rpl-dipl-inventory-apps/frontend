@@ -1,8 +1,8 @@
 import { SET_AUTHENTICATION_TOKEN } from 'constant/types/authentication';
 
 const initialState = {
-    isAuthenticated: true, // temporary change
-    token: 'token', // temporary change
+    isAuthenticated: false, // temporary change
+    token: null, // temporary change
 };
 
 export const authentication = (state = initialState, action) => {

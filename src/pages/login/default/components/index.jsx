@@ -1,6 +1,7 @@
 import loginImgPng from 'assets/login_img.png';
 import Button from 'components/Button';
 import Input from 'components/Input';
+import users from 'constant/api/users';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
@@ -28,22 +29,29 @@ const Content = () => {
         validateOnChange: true,
         validateOnBlur: true,
         validateOnMount: true,
-        onSubmit: async () => {
+        onSubmit: async (values) => {
             const path =
                 localStorage.getItem('redirect') || '/dashboard';
             window.showLoader(true);
             window.setLoaderIsAuth(true);
             const toastId = 'login';
 
-            dispatch(setAuthenticationToken('token'));
-            dispatch(
-                populateProfile({
-                    username: 'tes',
-                }),
-            );
-            window.showLoader(false);
-            window.showToast(toastId, 'info', 'Success Login');
-            history.push(path);
+            try {
+                const res = await users.login(values);
+                dispatch(setAuthenticationToken(res.data.token));
+                const resUser = await users.verify();
+                dispatch(populateProfile(resUser?.data));
+                window.showLoader(false);
+                window.showToast(toastId, 'info', 'Success Login');
+                history.push(path);
+            } catch (error) {
+                window.showLoader(false);
+                window.showToast(
+                    toastId,
+                    'error',
+                    error?.response?.data?.message ?? error?.message,
+                );
+            }
         },
     });
 

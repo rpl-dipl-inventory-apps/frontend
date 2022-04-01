@@ -1,5 +1,5 @@
 const Button = (props) => {
-    const { label, color, type, ...res } = props;
+    const { label, color, type, children, ...res } = props;
 
     const getColorBtn = (type) => {
         if (type === 'primary') {
@@ -21,7 +21,7 @@ const Button = (props) => {
                 color,
             )}  py-2 px-7 rounded-md  transition duration-500 w-full focus:outline-none`}
         >
-            {label}
+            {label ?? children}
         </button>
     );
 };

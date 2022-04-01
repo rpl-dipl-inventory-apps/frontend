@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/no-onchange */
+import Button from 'components/Button';
 import Input from 'components/Input';
 import { matchSorter } from 'match-sorter';
 import { useMemo, useState } from 'react';
@@ -104,7 +105,7 @@ export const DateRangeColumnFilter = ({
     const today = new Date();
     return (
         <div className="w-full flex flex-col md:flex-row">
-            <div className="px-0 md:pl-0 md:pr-2.5  py-2 md:py-0">
+            <div className="px-0 md:pl-0 md:pr-2.5  py-2 md:py-0 w-full md:w-1/2">
                 <Input
                     onChange={(e) => {
                         const val = e.target.value;
@@ -116,13 +117,13 @@ export const DateRangeColumnFilter = ({
                     type="date"
                     value={filterValue[0] || ''}
                     outline={true}
-                    inputBg="bg-theme-brown-300"
                     label={`${Header} From`}
                     name="from"
                     max={today.toISOString().slice(0, 10)}
+                    inputBg="bg-theme-brown-300"
                 />
             </div>
-            <div className="px-0 md:pr-0 md:pl-2.5 py-2 md:py-0">
+            <div className="px-0 md:pr-0 md:pl-2.5 py-2 md:py-0 w-full md:w-1/2">
                 <Input
                     label={`${Header} To`}
                     name="to"
@@ -214,34 +215,38 @@ const CustomTable = (props) => {
     return (
         <>
             <div className="flex flex-row justify-between w-full">
-                <div className="flex flex-col w-full">
+                <div className="flex flex-col w-full relative">
                     <div className="flex flex-row w-full">
                         <div className="flex justify-start w-1/2">
                             {AddButton && <AddButton />}
                         </div>
 
                         <div className="flex justify-end w-1/2">
-                            <button
-                                type="button"
-                                className="bg-theme-brown-300 focus:outline-none px-8 py-3 rounded-md"
-                                onClick={() =>
-                                    setOpenFilters(!openFilters)
-                                }
-                            >
-                                Filters
-                            </button>
+                            <div className=" w-full md:w-1/3 lg:w-1/5">
+                                <Button
+                                    type="button"
+                                    className="text-white focus:outline-none px-8 py-3 rounded-md"
+                                    onClick={() =>
+                                        setOpenFilters(!openFilters)
+                                    }
+                                >
+                                    Filters
+                                </Button>
+                            </div>
                         </div>
                     </div>
                     <div
-                        className={`py-3 my-2 bg-theme-brown-100 px-5 ${
-                            !openFilters && 'hidden'
+                        className={`py-3 my-2  transition-all duration-200 ${
+                            !openFilters
+                                ? 'opacity-0 absolute top-14 w-full -z-20'
+                                : 'opacity-100 '
                         } `}
                     >
                         {headerGroups.map(
                             (headerGroup, headerGroupIdx) => (
                                 <div
                                     key={headerGroupIdx}
-                                    className="flex flex-col md:flex-row flex-wrap"
+                                    className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-theme-brown-100 rounded-md shadow-lg py-5"
                                 >
                                     {headerGroup.headers.map(
                                         (column, columnIdx) => {
@@ -256,9 +261,8 @@ const CustomTable = (props) => {
                                                         }
                                                         className={`px-2.5 py-2 w-full ${
                                                             column?.filter ===
-                                                            'dateBetween'
-                                                                ? 'md:w-1/2'
-                                                                : 'md:w-1/5'
+                                                                'dateBetween' &&
+                                                            'col-span-1 md:col-span-2'
                                                         }`}
                                                     >
                                                         <div className="w-full">
@@ -274,29 +278,31 @@ const CustomTable = (props) => {
                                 </div>
                             ),
                         )}
-                        <div className="px-5 py-2">
-                            <button
-                                type="button"
-                                className="bg-theme-brown-300 focus:outline-none px-8 py-3 rounded-md"
-                                onClick={() => setAllFilters([])}
-                            >
-                                Clear Filter
-                            </button>
+                        <div className=" py-2">
+                            <div className="w-full md:w-1/4  xl:w-[16.5%]">
+                                <Button
+                                    type="button"
+                                    className="text-white focus:outline-none px-8 py-3 rounded-md"
+                                    onClick={() => setAllFilters([])}
+                                >
+                                    Clear Filter
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="overflow-x-auto overflow-y-hidden">
+            <div className="overflow-x-auto overflow-y-hidden ">
                 <table
                     {...getTableProps()}
-                    className="border-separate"
+                    className="border-separate "
                     style={{
                         borderSpacing: '0px 20px',
                         width: '1550px',
                     }}
                 >
-                    <thead className="bg-theme-brown-300 h-18 shadow-md ">
+                    <thead className="bg-theme-brown-300 h-16 shadow-lg">
                         {headerGroups.map(
                             (headerGroup, headerGroupIdx) => (
                                 <tr
@@ -347,8 +353,16 @@ const CustomTable = (props) => {
                     </thead>
                     <tbody {...getTableBodyProps()}>
                         {page.length === 0 ? (
-                            <tr>
-                                <td>Data Empty</td>
+                            <tr className="bg-theme-brown-300 shadow-lg ">
+                                <td
+                                    colSpan={
+                                        headerGroups?.[0]?.headers
+                                            ?.length ?? 1
+                                    }
+                                    className="text-center text-xl font-medium rounded-xl py-3 "
+                                >
+                                    Data Empty
+                                </td>
                             </tr>
                         ) : (
                             page.map((row, rowIdx) => {
@@ -357,7 +371,7 @@ const CustomTable = (props) => {
                                     <tr
                                         {...row.getRowProps()}
                                         key={rowIdx}
-                                        className="bg-theme-brown-100 shadow-md"
+                                        className="bg-theme-brown-300 shadow-lg"
                                     >
                                         {row.cells.map(
                                             (cell, cellIdx) => {
@@ -410,61 +424,67 @@ const CustomTable = (props) => {
                     </tbody>
                 </table>
             </div>
-            <div className="flex flex-col md:flex-row justify-between py-3 text-sm md:text-base">
-                <div className="flex flex-row items-center py-2 w-full md:w-1/2 justify-center md:justify-start">
-                    <div>
-                        Showing Page {pageIndex + 1} of{' '}
-                        {pageOptions.length} pages
+            {page.length !== 0 && (
+                <div className="flex flex-col md:flex-row justify-between py-3 text-sm md:text-base">
+                    <div className="flex flex-row items-center py-2 w-full md:w-1/2 justify-center md:justify-start">
+                        <div>
+                            Showing Page {pageIndex + 1} of{' '}
+                            {pageOptions.length} pages
+                        </div>
+
+                        <div className="px-2">
+                            <select
+                                className="focus:outline-none bg-theme-brown-300 px-3 py-2 rounded-md"
+                                value={pageSize}
+                                onChange={(e) => {
+                                    setPageSize(
+                                        Number(e.target.value),
+                                    );
+                                }}
+                            >
+                                {[10, 20, 30, 40, 50].map(
+                                    (pageSize) => (
+                                        <option
+                                            key={pageSize}
+                                            value={pageSize}
+                                        >
+                                            Show {pageSize}
+                                        </option>
+                                    ),
+                                )}
+                            </select>
+                        </div>
                     </div>
 
-                    <div className="px-2">
-                        <select
-                            className="focus:outline-none bg-theme-brown-300 px-3 py-2 rounded-md"
-                            value={pageSize}
-                            onChange={(e) => {
-                                setPageSize(Number(e.target.value));
-                            }}
+                    <div className="py-2 w-full md:w-1/2 flex justify-center md:justify-end items-center">
+                        <button
+                            className={`focus:outline-none ${
+                                !canPreviousPage && 'text-gray-400'
+                            }`}
+                            onClick={() => previousPage()}
+                            disabled={!canPreviousPage}
                         >
-                            {[10, 20, 30, 40, 50].map((pageSize) => (
-                                <option
-                                    key={pageSize}
-                                    value={pageSize}
-                                >
-                                    Show {pageSize}
-                                </option>
-                            ))}
-                        </select>
+                            previous
+                        </button>
+                        <span className="px-3">
+                            {getVisiblePages(
+                                pageIndex + 1,
+                                pageOptions.length,
+                                gotoPage,
+                            )}
+                        </span>
+                        <button
+                            className={`focus:outline-none ${
+                                !canNextPage && 'text-gray-400'
+                            }`}
+                            onClick={() => nextPage()}
+                            disabled={!canNextPage}
+                        >
+                            next
+                        </button>
                     </div>
                 </div>
-
-                <div className="py-2 w-full md:w-1/2 flex justify-center md:justify-end items-center">
-                    <button
-                        className={`focus:outline-none ${
-                            !canPreviousPage && 'text-gray-400'
-                        }`}
-                        onClick={() => previousPage()}
-                        disabled={!canPreviousPage}
-                    >
-                        previous
-                    </button>
-                    <span className="px-3">
-                        {getVisiblePages(
-                            pageIndex + 1,
-                            pageOptions.length,
-                            gotoPage,
-                        )}
-                    </span>
-                    <button
-                        className={`focus:outline-none ${
-                            !canNextPage && 'text-gray-400'
-                        }`}
-                        onClick={() => nextPage()}
-                        disabled={!canNextPage}
-                    >
-                        next
-                    </button>
-                </div>
-            </div>
+            )}
         </>
     );
 };

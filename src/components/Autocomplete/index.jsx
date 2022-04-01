@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import PropTypes from 'prop-types';
+import { useRef } from 'react';
 import { useMemo } from 'react';
 import { useEffect, useState } from 'react';
 
@@ -58,6 +59,8 @@ const Autocomplete = (props) => {
         });
     };
 
+    const waitSetDefaultValueDone = useRef(true);
+
     useEffect(() => {
         if (defaultValue?.[labelKey] && uniqueOptions) {
             const filtered =
@@ -76,6 +79,10 @@ const Autocomplete = (props) => {
     }, [defaultValue, uniqueOptions]);
 
     useEffect(() => {
+        if (waitSetDefaultValueDone.current) {
+            waitSetDefaultValueDone.current = false;
+            return;
+        }
         if (inputvalue?.[labelKey]) {
             const filtered =
                 Array.isArray(uniqueOptions) &&
@@ -151,7 +158,7 @@ const Autocomplete = (props) => {
                 <div
                     className={`absolute w-full ${inputBg} border-gray-400 focus:border-gray-400 hover:border-gray-400 ${border} mt-1 transition-all block ${
                         isDropdownOpen
-                            ? 'opacity-100'
+                            ? 'opacity-100 z-1'
                             : 'opacity-0 -z-1'
                     }`}
                 >

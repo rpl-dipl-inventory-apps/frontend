@@ -1,4 +1,6 @@
 import LayoutBack from 'components/LayoutBack';
+import locations from 'constant/api/locations';
+import products from 'constant/api/products';
 import Content from 'pages/managestock/editstock/components';
 import { useMemo } from 'react';
 import { useEffect, useState } from 'react';
@@ -32,9 +34,26 @@ const EditStock = () => {
 
     const [data, setData] = useState(null);
     useEffect(async () => {
-        window.showLoader(true);
-        setData([]);
-        window.showLoader(false);
+        const toastId = 'fetchprodall';
+        try {
+            window.showLoader(true);
+            const dataObj = {};
+            const res = await products.getAll();
+            if (query.get('type') === 'Add') {
+                const resLoc = await locations.getAll();
+                dataObj.locations = resLoc.data;
+            }
+            dataObj.products = res.data;
+            setData(dataObj);
+            window.showLoader(false);
+        } catch (error) {
+            window.showLoader(false);
+            window.showToast(
+                toastId,
+                'error',
+                error?.response?.data?.message ?? error?.message,
+            );
+        }
     }, []);
 
     return (

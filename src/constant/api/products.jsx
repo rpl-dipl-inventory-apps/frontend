@@ -8,6 +8,8 @@ const products = {
     delete: (id) => axios.delete(`/products/${id}`),
     getRecent: () => axios.get('/products/recent'),
     getTotal: () => axios.get('/products/total'),
+    reduceStock: (id, data) =>
+        axios.put(`/products/${id}/stock/reduce`, data),
 };
 
 export default products;
