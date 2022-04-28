@@ -19,6 +19,12 @@ const StockHistoryContent = ({ data: dataHistory }) => {
                 filter: 'fuzzyText',
             },
             {
+                Header: 'Location',
+                accessor: 'location_name',
+                filterable: true,
+                filter: 'fuzzyText',
+            },
+            {
                 Header: 'Type',
                 accessor: 'type',
                 filterable: false,
@@ -28,6 +34,12 @@ const StockHistoryContent = ({ data: dataHistory }) => {
                 Header: 'Quantity',
                 accessor: 'quantity',
                 filterable: false,
+            },
+            {
+                Header: 'Action By',
+                accessor: 'username',
+                filterable: true,
+                filter: 'fuzzyText',
             },
             {
                 Header: 'Created At',

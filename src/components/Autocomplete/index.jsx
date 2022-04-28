@@ -21,6 +21,7 @@ const Autocomplete = (props) => {
         setValue,
         loading = false,
         defaultValue,
+        disabled = false,
     } = props;
 
     const colorBg = inputBg
@@ -32,7 +33,7 @@ const Autocomplete = (props) => {
         : 'border-b rounded-none';
     const borderColor = error
         ? 'border-red-400 focus:border-red-400 hover:border-red-400'
-        : `border-${colorBg} focus:border-gray-400 hover:border-gray-400`;
+        : `border-${colorBg} focus:border-gray-400 hover:border-gray-400 disabled:border-gray-200 disabled:hover:border-gray-200`;
 
     const uniqueOptions = useMemo(
         () =>
@@ -132,7 +133,7 @@ const Autocomplete = (props) => {
                         value={inputvalue?.[labelKey] ?? ''}
                         onChange={handleOnchangeInput}
                         id={name}
-                        className={`h-10 w-full px-2 transition-all outline-none ${borderColor} ${border} ${inputClass} ${inputBg}`}
+                        className={`h-10 w-full px-2  transition-all outline-none disabled:bg-gray-100 ${borderColor} ${border} ${inputClass} ${inputBg}`}
                         autoComplete="off"
                         onFocus={() => {
                             setIsDropdownOpen(true);
@@ -144,13 +145,15 @@ const Autocomplete = (props) => {
                                 setIsInputOnBlur(true);
                             }, 200)
                         }
+                        disabled={disabled}
                     />
                     <button
                         type="button"
-                        className="transition-all  absolute inset-y-0 right-0 mx-3 flex items-center cursor-pointer focus:outline-none hover:outline-none outline-none border-none"
+                        className="disabled:cursor-default transition-all  absolute inset-y-0 right-0 mx-3 flex items-center cursor-pointer focus:outline-none hover:outline-none outline-none border-none"
                         onClick={() =>
                             setIsDropdownOpen(!isDropdownOpen)
                         }
+                        disabled={disabled}
                     >
                         {isDropdownOpen ? '✕' : '▼'}
                     </button>

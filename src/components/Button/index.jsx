@@ -3,13 +3,13 @@ const Button = (props) => {
 
     const getColorBtn = (type) => {
         if (type === 'primary') {
-            return 'bg-theme-orange-500 text-white hover:bg-theme-orange-400';
+            return 'bg-theme-orange-500 text-white hover:bg-theme-orange-400 disabled:bg-theme-orange-400';
         } else if (type === 'secondary') {
-            return 'bg-theme-orange-200 text-white hover:bg-theme-orange-400';
+            return 'bg-theme-orange-200 text-white hover:bg-theme-orange-400 disabled:bg-theme-orange-400';
         } else if (type === 'home') {
-            return 'bg-white text-theme-orange-500 hover:bg-theme-orange-400 hover:border hover:border-white hover:text-white';
+            return 'bg-white text-theme-orange-500 hover:bg-theme-orange-400 hover:border hover:border-white hover:text-white disabled:bg-theme-orange-400';
         } else {
-            return 'bg-theme-orange-500 text-white hover:bg-theme-orange-400';
+            return 'bg-theme-orange-500 text-white hover:bg-theme-orange-400 disabled:bg-theme-orange-400';
         }
     };
 
@@ -19,7 +19,7 @@ const Button = (props) => {
             type={type ?? 'button'}
             className={`${getColorBtn(
                 color,
-            )}  py-2 px-7 rounded-md  transition duration-500 w-full focus:outline-none`}
+            )}  py-2 px-7 rounded-md disabled:cursor-default transition duration-500 w-full focus:outline-none`}
         >
             {label ?? children}
         </button>

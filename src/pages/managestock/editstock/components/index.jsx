@@ -255,8 +255,8 @@ const EditStockContent = ({ data, type }) => {
                             {reduceStockResponse && (
                                 <div className="w-full px-2 py-3 flex flex-col justify-center">
                                     <p>
-                                        pick up items at the following
-                                        locations :
+                                        pick up this items at the
+                                        following locations :
                                     </p>
                                     <br />
                                     <ul className="list-disc">

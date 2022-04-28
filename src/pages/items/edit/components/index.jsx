@@ -252,6 +252,7 @@ const AddItemContent = ({ data }) => {
                                                             loading={
                                                                 optionLoading
                                                             }
+                                                            disabled
                                                         />
                                                     </div>
                                                     <div className="w-full md:w-[46%] md:pl-2 py-3 md:py-0">
@@ -276,17 +277,19 @@ const AddItemContent = ({ data }) => {
                                                             {...props.getFieldProps(
                                                                 `stock_list[${index}].quantity`,
                                                             )}
+                                                            disabled
                                                         />
                                                     </div>
                                                     <div className="w-[4%] flex justify-center items-center px-2 text-2xl">
                                                         <button
+                                                            disabled
                                                             onClick={() =>
                                                                 arrayHelper.remove(
                                                                     index,
                                                                 )
                                                             }
                                                             type="button"
-                                                            className={`px-3 py-1  ml-5 text-white bg-red-400 hover:bg-red-500 rounded-md ${
+                                                            className={`px-3 py-1  ml-5 text-white bg-red-400 disabled:bg-red-300 disabled:cursor-default hover:bg-red-500 rounded-md ${
                                                                 (props
                                                                     .touched
                                                                     ?.stock_list?.[
@@ -323,6 +326,11 @@ const AddItemContent = ({ data }) => {
                                         )}
                                         <div className="w-full px-2 py-3 flex justify-end items-center">
                                             <p className="text-red-500 text-center px-10">
+                                                Please use the manage
+                                                stock feature to
+                                                update stock
+                                            </p>
+                                            <p className="text-red-500 text-center px-10">
                                                 {props?.touched
                                                     ?.stock_list &&
                                                     !Array.isArray(
@@ -334,6 +342,7 @@ const AddItemContent = ({ data }) => {
                                             </p>
                                             <div className="w-full md:w-1/2 xl:w-1/5">
                                                 <Button
+                                                    disabled
                                                     color="primary"
                                                     label="Add stock"
                                                     onClick={() =>
