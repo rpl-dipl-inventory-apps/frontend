@@ -2,7 +2,7 @@ import Button from 'components/Button';
 import Paper from 'components/Paper';
 import { useHistory } from 'react-router-dom';
 
-const ManageStockDefaultStock = () => {
+const ManageStockDefaultStock = ({ inventoryId }) => {
     const history = useHistory();
     return (
         <Paper>
@@ -14,7 +14,11 @@ const ManageStockDefaultStock = () => {
                             type="primary"
                             onClick={() =>
                                 history.push(
-                                    '/managestock/edit?type=Add',
+                                    `/managestock/edit?type=Add${
+                                        inventoryId
+                                            ? `&inventory=${inventoryId}`
+                                            : ''
+                                    }`,
                                 )
                             }
                         />
@@ -25,7 +29,11 @@ const ManageStockDefaultStock = () => {
                             type="primary"
                             onClick={() =>
                                 history.push(
-                                    '/managestock/edit?type=Reduce',
+                                    `/managestock/edit?type=Reduce${
+                                        inventoryId
+                                            ? `&inventory=${inventoryId}`
+                                            : ''
+                                    }`,
                                 )
                             }
                         />

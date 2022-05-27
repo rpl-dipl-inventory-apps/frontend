@@ -31,7 +31,10 @@ const ProtectedRoute = ({
     }
 
     if (location.pathname !== '/logout') {
-        localStorage.setItem('redirect', location.pathname);
+        localStorage.setItem(
+            'redirect',
+            (location.pathname + location.search).substr(1),
+        );
     }
 
     return <>{!loader.isActive && <Redirect to={`/login`} />}</>;

@@ -24,7 +24,11 @@ import ManageStockDefault from 'pages/managestock/default';
 import EditStock from 'pages/managestock/editstock';
 import NotFound from 'pages/notfound/default';
 import Register from 'pages/register/default';
+import SelectInventory from 'pages/select-inventory/default';
 import ListHistory from 'pages/stockhistory/list';
+import AddSupplier from 'pages/suppliers/add';
+import ListSupplier from 'pages/suppliers/list';
+import ListUsers from 'pages/users/list';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
@@ -76,6 +80,11 @@ const App = () => {
                     exact
                     path="/dashboard"
                     component={Dashboard}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/select-inventory"
+                    component={SelectInventory}
                 />
                 <ProtectedRoute
                     exact
@@ -139,6 +148,16 @@ const App = () => {
                 />
                 <ProtectedRoute
                     exact
+                    path="/suppliers"
+                    component={ListSupplier}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/suppliers/add"
+                    component={AddSupplier}
+                />
+                <ProtectedRoute
+                    exact
                     path="/logout"
                     component={Logout}
                 />
@@ -146,6 +165,11 @@ const App = () => {
                     exact
                     path="/account"
                     component={Account}
+                />
+                <ProtectedRoute
+                    exact
+                    path="/users"
+                    component={ListUsers}
                 />
                 <Route exact path="/" component={Home} />
                 <Route path="*" component={NotFound} />

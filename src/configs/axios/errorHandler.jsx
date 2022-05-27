@@ -28,6 +28,8 @@ export default async function ErrorHandler(error) {
                 await users.logout();
                 store.dispatch(setAuthenticationToken(null));
                 store.dispatch(populateProfile(null));
+                localStorage.removeItem('inventory');
+                localStorage.removeItem('inventory_name');
                 throw new Error('session expired, please re login!');
             }
 
@@ -46,6 +48,8 @@ export default async function ErrorHandler(error) {
     }
 
     if (originalRequest.url === PATH_REFRESH_TOKEN) {
+        localStorage.removeItem('inventory');
+        localStorage.removeItem('inventory_name');
         store.dispatch(setAuthenticationToken(null));
         store.dispatch(populateProfile(null));
     }

@@ -13,6 +13,8 @@ const Logout = () => {
         dispatch(setAuthenticationToken(null));
         dispatch(populateProfile(null));
         window.showLoader(false);
+        localStorage.removeItem('inventory');
+        localStorage.removeItem('inventory_name');
         history.push('/');
     }, []);
 

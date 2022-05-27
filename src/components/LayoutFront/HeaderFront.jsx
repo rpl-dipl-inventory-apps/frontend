@@ -26,6 +26,8 @@ const HeaderFront = ({ match, location }) => {
         (state) => state.authentication,
     );
 
+    const user = useSelector((state) => state.users);
+
     const listNavbar = [
         {
             label: 'Home',
@@ -47,7 +49,11 @@ const HeaderFront = ({ match, location }) => {
         },
         {
             label: 'Dashboard',
-            path: '/dashboard',
+            path: `${
+                user?.role === 'supplier'
+                    ? '/select-inventory'
+                    : '/dashboard'
+            }`,
             isGuest: false,
             needAuth: true,
         },

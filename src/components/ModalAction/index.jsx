@@ -4,8 +4,13 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const ModalAction = (props) => {
-    const { item, setSelectedItem, setModalDeleteOpen, urlEdit } =
-        props;
+    const {
+        item,
+        setSelectedItem,
+        setModalDeleteOpen,
+        urlEdit,
+        disableEdit = false,
+    } = props;
     const [isOpen, setIsOpen] = useState(false);
     const currentElm = useRef(null);
 
@@ -36,18 +41,21 @@ const ModalAction = (props) => {
             </button>
             <div
                 ref={currentElm}
-                className={`absolute bg-white px-5 py-2 rounded-md shadow-md -top-5 right-7 ${
+                className={`absolute bg-white px-5 py-2 rounded-md shadow-md  right-7 ${
                     isOpen ? 'opacity-100' : 'opacity-0 -z-1'
-                }`}
+                } ${disableEdit ? 'top-0' : '-top-5'}`}
             >
-                <div className="py-1">
-                    <Link
-                        className="text-black no-underline hover:underline hover:text-blue-600"
-                        to={urlEdit}
-                    >
-                        edit
-                    </Link>
-                </div>
+                {!disableEdit && (
+                    <div className="py-1">
+                        <Link
+                            className="text-black no-underline hover:underline hover:text-blue-600"
+                            to={urlEdit}
+                        >
+                            edit
+                        </Link>
+                    </div>
+                )}
+
                 <div className="py-1">
                     <button
                         onClick={() => {

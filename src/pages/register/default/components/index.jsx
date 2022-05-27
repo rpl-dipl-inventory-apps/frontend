@@ -1,6 +1,7 @@
 import registerImgPng from 'assets/register_img.png';
 import Button from 'components/Button';
 import Input from 'components/Input';
+import users from 'constant/api/users';
 import { useFormik } from 'formik';
 import { Link, useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -13,6 +14,7 @@ const Content = () => {
             email: '',
             password: '',
             confirm_password: '',
+            supplier: false,
         },
         validationSchema: Yup.object().shape({
             username: Yup.string().required('username required'),
@@ -30,16 +32,28 @@ const Content = () => {
         validateOnChange: true,
         validateOnBlur: true,
         validateOnMount: true,
-        onSubmit: async () => {
+        onSubmit: async (values) => {
             window.showLoader(true);
             const toastId = 'login';
-            window.showLoader(false);
-            window.showToast(
-                toastId,
-                'info',
-                'Success Create New Account',
-            );
-            setTimeout(() => history.push('/login'), 1000);
+
+            try {
+                window.showLoader(false);
+                await users.create(values, values.supplier);
+                window.showToast(
+                    toastId,
+                    'info',
+                    'Success Create New Account',
+                );
+                setTimeout(() => history.push('/login'), 1000);
+            } catch (error) {
+                window.showLoader(false);
+                window.showToast(
+                    toastId,
+                    'error',
+                    error?.response?.data?.message ??
+                        'Failed Create New Account',
+                );
+            }
         },
     });
 
@@ -114,6 +128,21 @@ const Content = () => {
                                 'confirm_password',
                             )}
                         />
+                    </div>
+                    <div className="my-7 flex items-center">
+                        <input
+                            className="px-2"
+                            id="supplier"
+                            type="checkbox"
+                            name="supplier"
+                            {...formik.getFieldProps('supplier')}
+                        />
+                        <label
+                            htmlFor="supplier"
+                            className="left-2 px-3"
+                        >
+                            Supplier
+                        </label>
                     </div>
                     <div className="mb-3 my-7">
                         <Button

@@ -1,10 +1,11 @@
 import LayoutBack from 'components/LayoutBack';
-import products from 'constant/api/products';
-import Content from 'pages/items/list/components';
+import supplier from 'constant/api/supplier';
 import { useRef } from 'react';
 import { useEffect, useState } from 'react';
 
-const ListItems = () => {
+import ListSuppliersContent from './components';
+
+const ListSupplier = () => {
     const [data, setData] = useState([]);
     const [eventDelete, setEventDelete] = useState(false);
     const firstRender = useRef(true);
@@ -14,23 +15,9 @@ const ListItems = () => {
         if (firstRender.current || eventDelete) {
             try {
                 window.showLoader(true);
-                const res = await products.getAll();
-                const dataMapped = res.data.map((item) => ({
-                    ...item,
-                    id: item?.increment_id,
-                    category: item?.category_name ?? '',
-                    location: [
-                        ...new Set(
-                            item?.stock_list?.map(
-                                (stock) => stock?.location_name,
-                            ),
-                        ),
-                    ].join(', '),
-                    created_at: new Date(
-                        item.created_at,
-                    ).toLocaleString(),
-                }));
-                setData(dataMapped);
+                const res = await supplier.getAll();
+
+                setData(res.data);
                 window.showLoader(false);
                 firstRender.current = false;
                 setEventDelete(false);
@@ -49,12 +36,15 @@ const ListItems = () => {
 
     return (
         <LayoutBack
-            mainTitle="List Items "
-            childTitle="Always check your items everyday!"
+            mainTitle="List Suppliers"
+            childTitle="Always check your suppliers everyday!"
         >
-            <Content data={data} setEventDelete={setEventDelete} />
+            <ListSuppliersContent
+                data={data}
+                setEventDelete={setEventDelete}
+            />
         </LayoutBack>
     );
 };
 
-export default ListItems;
+export default ListSupplier;

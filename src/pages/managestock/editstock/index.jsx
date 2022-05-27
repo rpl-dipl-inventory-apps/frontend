@@ -1,20 +1,23 @@
+import useQuery from 'components/hooks/useQuery';
 import LayoutBack from 'components/LayoutBack';
 import locations from 'constant/api/locations';
 import products from 'constant/api/products';
 import Content from 'pages/managestock/editstock/components';
-import { useMemo } from 'react';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 
 const EditStock = () => {
-    const location = useLocation();
     const history = useHistory();
-    const query = useMemo(
-        () => new URLSearchParams(location.search),
-        [location.search],
-    );
+    const query = useQuery();
 
     const [type, setType] = useState('');
+
+    const location = useLocation();
+    const user = useSelector((state) => state.users);
+    const isSupplier = user?.role === 'supplier';
+    const inventoryId = query.get('inventory');
+    const inventoryName = localStorage.getItem('inventory_name');
 
     useEffect(() => {
         if (
@@ -38,9 +41,13 @@ const EditStock = () => {
         try {
             window.showLoader(true);
             const dataObj = {};
-            const res = await products.getAll();
+            const res = await products.getAll(
+                isSupplier ? inventoryId : null,
+            );
             if (query.get('type') === 'Add') {
-                const resLoc = await locations.getAll();
+                const resLoc = await locations.getAll(
+                    isSupplier ? inventoryId : null,
+                );
                 dataObj.locations = resLoc.data;
             }
             dataObj.products = res.data;
@@ -58,12 +65,20 @@ const EditStock = () => {
 
     return (
         <LayoutBack
-            mainTitle={`${type} Your Product Stock`}
+            mainTitle={`${type} Your Product Stock ${
+                isSupplier && inventoryName
+                    ? `in inventory ${inventoryName}`
+                    : ''
+            }`}
             childTitle={`What product do you want to ${type.toLowerCase()} stock?`}
             enableBackBtn
-            backBtnLink="/managestock"
+            backBtnLink={`/managestock${location.search}`}
         >
-            <Content data={data} type={type} />
+            <Content
+                data={data}
+                type={type}
+                inventoryId={inventoryId}
+            />
         </LayoutBack>
     );
 };

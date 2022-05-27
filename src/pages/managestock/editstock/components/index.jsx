@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 
-const EditStockContent = ({ data, type }) => {
+const EditStockContent = ({ data, type, inventoryId }) => {
     const history = useHistory();
     const [selectedData, setSelectedData] = useState(null);
     const [dataByIdLoading, setDataByIdLoading] = useState(false);
@@ -59,6 +59,7 @@ const EditStockContent = ({ data, type }) => {
                     const res = await products.reduceStock(
                         selectedData.id,
                         fixValues,
+                        inventoryId,
                     );
                     const stockList = res?.data?.stock_list;
                     setReduceStockResponse(stockList);
@@ -70,6 +71,7 @@ const EditStockContent = ({ data, type }) => {
                     await products.update(
                         selectedData?.id,
                         fixValues,
+                        inventoryId,
                     );
                 }
 
@@ -100,7 +102,7 @@ const EditStockContent = ({ data, type }) => {
         if (formik.values.selectedProduct) {
             setDataByIdLoading(true);
             products
-                .getById(formik.values.selectedProduct)
+                .getById(formik.values.selectedProduct, inventoryId)
                 .then((res) => {
                     setSelectedData(res?.data);
                     setDataByIdLoading(false);
