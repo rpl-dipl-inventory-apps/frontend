@@ -14,7 +14,7 @@ const ListCategoryContent = () => {
         () => [
             {
                 Header: 'ID',
-                accessor: 'id',
+                accessor: 'increment_id',
                 filterable: true,
                 filter: 'fuzzyText',
             },

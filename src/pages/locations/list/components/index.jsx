@@ -14,7 +14,7 @@ const ListLocationsContent = () => {
         () => [
             {
                 Header: 'ID',
-                accessor: 'id',
+                accessor: 'increment_id',
                 filterable: true,
                 filter: 'fuzzyText',
             },
