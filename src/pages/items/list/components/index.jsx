@@ -17,7 +17,7 @@ const ListItemsContent = ({ data: dataProducts, setEventDelete }) => {
         () => [
             {
                 Header: 'ID',
-                accessor: 'id',
+                accessor: 'increment_id',
                 filterable: true,
                 filter: 'fuzzyText',
             },

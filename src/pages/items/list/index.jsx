@@ -17,7 +17,6 @@ const ListItems = () => {
                 const res = await products.getAll();
                 const dataMapped = res.data.map((item) => ({
                     ...item,
-                    id: item?.increment_id,
                     category: item?.category_name ?? '',
                     location: [
                         ...new Set(

@@ -9,12 +9,14 @@ const SideBar = ({ match }) => {
     const path = match?.path;
     const history = useHistory();
 
-    const isActive = (path, navPath) => {
-        const existPath = path
+    const isActive = (currentPath, navPath) => {
+        const existPath = currentPath
             .split('/')
             .filter((item) => `/${item}` === navPath);
         const activePath =
-            existPath.length > 0 ? `/${existPath[0]}` : path;
+            existPath.length > 0 && existPath[0] !== ''
+                ? `/${existPath[0]}`
+                : currentPath;
 
         return activePath === navPath
             ? 'border-r-3 border-red-500 sidebar-active-bg'
@@ -91,6 +93,11 @@ const SideBar = ({ match }) => {
             path: '/logout',
             roles: ['default', 'admin', 'supplier'],
         },
+        {
+            label: 'Back to Home',
+            path: '/',
+            roles: ['default', 'admin', 'supplier'],
+        },
     ];
 
     useEffect(() => {
@@ -143,7 +150,7 @@ const SideBar = ({ match }) => {
                     </Link>
                 </div>
                 <div className="flex px-2 mx-2 justify-center w-full items-center">
-                    <ul className="flex flex-col w-full">
+                    <ul className="flex flex-col w-full overflow-y-auto h-140 sidebar-scroll">
                         {listNav
                             .filter(
                                 (item) =>
@@ -170,18 +177,6 @@ const SideBar = ({ match }) => {
                                 </li>
                             ))}
                     </ul>
-                </div>
-                <div className="flex px-2 mx-2 justify-center w-full items-center bottom-0 absolute">
-                    <div className="my-2 mb-3  py-1 w-full hover:border-r-3 hover:border-red-500">
-                        <div className="pl-10 ">
-                            <Link
-                                to="/"
-                                className="text-lg underline-transparent text-black"
-                            >
-                                Back to Home
-                            </Link>
-                        </div>
-                    </div>
                 </div>
             </div>
         </>
