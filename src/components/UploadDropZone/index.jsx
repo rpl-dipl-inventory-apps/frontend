@@ -72,9 +72,16 @@ const UploadDropZone = (props) => {
 
                 <input {...getInputProps()} />
                 <p>
-                    {!imagePreview &&
-                        `Drop your images here or
-                                        browse`}
+                    {!imagePreview && (
+                        <>
+                            <p>Drop your images here or browse.</p>
+                            <br />{' '}
+                            <p>
+                                if jpg can&apos;t be uploaded, please
+                                try png
+                            </p>
+                        </>
+                    )}
                 </p>
             </div>
             {imagePreview && (
