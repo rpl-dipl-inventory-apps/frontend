@@ -4,8 +4,8 @@ import Content from 'pages/categories/add/components';
 const AddCategory = () => {
     return (
         <LayoutBack
-            mainTitle="Add New Location"
-            childTitle="What location do you want to add to inventory?"
+            mainTitle="Add New Category"
+            childTitle="What category do you want to add to inventory?"
             enableBackBtn
             backBtnLink="/categories"
         >
