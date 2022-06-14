@@ -18,7 +18,7 @@ const SideBar = ({ match }) => {
                 ? `/${existPath[0]}`
                 : currentPath;
 
-        return activePath === navPath
+        return navPath.includes(activePath)
             ? 'border-r-3 border-red-500 sidebar-active-bg'
             : '';
     };

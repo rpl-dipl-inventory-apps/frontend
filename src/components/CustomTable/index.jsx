@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-onchange */
 import Button from 'components/Button';
 import Input from 'components/Input';
-import { matchSorter } from 'match-sorter';
+import FuzzySearch from 'fuzzy-search';
 import { useMemo, useState } from 'react';
 import {
     useFilters,
@@ -63,9 +63,9 @@ const getVisiblePages = (currentPage, total, gotoPage) => {
 };
 
 const fuzzyTextFilterFn = (rows, id, filterValue) => {
-    return matchSorter(rows, filterValue, {
-        keys: [(row) => row.values[id]],
-    });
+    const key = `values.${id}`;
+    const searcher = new FuzzySearch(rows, [key]);
+    return searcher.search(filterValue);
 };
 
 fuzzyTextFilterFn.autoRemove = (val) => !val;

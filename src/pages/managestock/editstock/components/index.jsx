@@ -84,7 +84,12 @@ const EditStockContent = ({ data, type, inventoryId }) => {
 
                 if (type === 'Add') {
                     setTimeout(
-                        () => history.push('/managestock'),
+                        () =>
+                            history.push(
+                                inventoryId
+                                    ? `/managestock?inventory=${inventoryId}`
+                                    : '/managestock',
+                            ),
                         1000,
                     );
                 }
